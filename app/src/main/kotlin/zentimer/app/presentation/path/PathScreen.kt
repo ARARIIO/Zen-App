@@ -34,7 +34,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
 import org.koin.androidx.compose.koinViewModel
 import zentimer.app.data.local.entity.FocusSession
 import zentimer.app.ui.theme.Outfit
@@ -52,7 +51,7 @@ import java.util.Locale
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PathScreen(
-    navController: NavHostController,
+    onBack: () -> Unit = {},
     viewModel: PathViewModel = koinViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -65,7 +64,7 @@ fun PathScreen(
         TopAppBar(
             title = { Text("Путь", color = ZenText) },
             navigationIcon = {
-                IconButton(onClick = { navController.popBackStack() }) {
+                IconButton(onClick = onBack) {
                     Icon(Icons.AutoMirrored.Filled.ArrowBack, "Назад", tint = ZenText)
                 }
             },

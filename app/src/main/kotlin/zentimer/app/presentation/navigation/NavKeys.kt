@@ -1,6 +1,6 @@
 package zentimer.app.presentation.navigation
 
-import androidx.navigation3.NavKey
+import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Serializable
 
 @Serializable

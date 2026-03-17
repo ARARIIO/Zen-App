@@ -1,44 +1,43 @@
 package zentimer.app.presentation.navigation
 
-import androidx.compose.animation.AnimatedContentTransitionScope
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation3.runtime.entryProvider
+import androidx.navigation3.runtime.rememberNavBackStack
+import androidx.navigation3.ui.NavDisplay
 import zentimer.app.presentation.path.PathScreen
 import zentimer.app.presentation.settings.SettingsScreen
 import zentimer.app.presentation.timer.TimerScreen
 
-sealed class Screen(val route: String) {
-    data object Timer : Screen("timer")
-    data object Path : Screen("path")
-    data object Settings : Screen("settings")
-}
-
 @Composable
-fun ZenNavGraph(
-    navController: NavHostController = rememberNavController()
-) {
+fun ZenNavGraph() {
+    val backStack = rememberNavBackStack(TimerKey)
+
     Scaffold(
-        bottomBar = { ZenBottomBar(navController = navController) }
+        bottomBar = { ZenBottomBar(backStack = backStack) }
     ) { padding ->
-        NavHost(
-            navController = navController,
-            startDestination = Screen.Timer.route,
+        NavDisplay(
+            backStack = backStack,
             modifier = Modifier.padding(padding),
-            enterTransition = { fadeIn(animationSpec = tween(300)) },
-            exitTransition = { fadeOut(animationSpec = tween(300)) }
-        ) {
-            composable(Screen.Timer.route) { TimerScreen(navController = navController) }
-            composable(Screen.Path.route) { PathScreen(navController = navController) }
-            composable(Screen.Settings.route) { SettingsScreen(navController = navController) }
-        }
+            onBack = {
+                if (backStack.size > 1) backStack.removeLastOrNull()
+                else { backStack.clear(); backStack.add(TimerKey) }
+            },
+            entryProvider = entryProvider {
+                entry<TimerKey> {
+                    TimerScreen(
+                        onNavigateToSettings = { backStack.add(SettingsKey) }
+                    )
+                }
+                entry<PathKey> {
+                    PathScreen(onBack = { backStack.clear(); backStack.add(TimerKey) })
+                }
+                entry<SettingsKey> {
+                    SettingsScreen(onBack = { backStack.clear(); backStack.add(TimerKey) })
+                }
+            }
+        )
     }
 }

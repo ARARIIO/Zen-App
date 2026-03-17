@@ -34,7 +34,6 @@ import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
 import org.koin.androidx.compose.koinViewModel
 import zentimer.app.data.preferences.UserPreferencesRepository
 import zentimer.app.ui.theme.Outfit
@@ -48,7 +47,7 @@ import zentimer.app.ui.theme.ZenText
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
-    navController: NavHostController,
+    onBack: () -> Unit = {},
     viewModel: SettingsViewModel = koinViewModel()
 ) {
     val preferences by viewModel.preferences.collectAsState()
@@ -62,7 +61,7 @@ fun SettingsScreen(
         TopAppBar(
             title = { Text("Настройки", color = ZenText) },
             navigationIcon = {
-                IconButton(onClick = { navController.popBackStack() }) {
+                IconButton(onClick = onBack) {
                     Icon(Icons.AutoMirrored.Filled.ArrowBack, "Назад", tint = ZenText)
                 }
             },

@@ -42,9 +42,7 @@ import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
 import org.koin.androidx.compose.koinViewModel
-import zentimer.app.presentation.navigation.Screen
 import zentimer.app.ui.theme.GlowCyan
 import zentimer.app.ui.theme.GlowViolet
 import zentimer.app.ui.theme.SpaceGrotesk
@@ -57,7 +55,7 @@ import zentimer.app.ui.theme.ZenText
 
 @Composable
 fun TimerScreen(
-    navController: NavHostController,
+    onNavigateToSettings: () -> Unit = {},
     viewModel: TimerViewModel = koinViewModel()
 ) {
     val timerState by viewModel.timerState.collectAsState()
@@ -93,7 +91,7 @@ fun TimerScreen(
                     isBreak = isBreakMode,
                     onSwitch = { viewModel.switchMode(it) }
                 )
-                IconButton(onClick = { navController.navigate(Screen.Settings.route) }) {
+                IconButton(onClick = onNavigateToSettings) {
                     Icon(
                         Icons.Default.Settings,
                         contentDescription = "Настройки",
