@@ -1,9 +1,7 @@
 package zentimer.app.data.local
 
-import android.content.Context
-import androidx.room.Database
-import androidx.room.Room
-import androidx.room.RoomDatabase
+import androidx.room3.Database
+import androidx.room3.RoomDatabase
 import zentimer.app.data.local.dao.SessionDao
 import zentimer.app.data.local.entity.FocusSession
 
