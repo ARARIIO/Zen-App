@@ -26,14 +26,19 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlin.math.roundToInt
 import org.koin.androidx.compose.koinViewModel
 import zentimer.app.data.preferences.UserPreferencesRepository
 import zentimer.app.ui.theme.Outfit
@@ -86,7 +91,7 @@ fun SettingsScreen(
                 valueRange = 15f..60f,
                 steps = 8,
                 color = ZenPrimary,
-                onValueChange = { viewModel.setFocusDuration(it.toInt()) }
+                onValueChange = { viewModel.setFocusDuration(it.roundToInt()) }
             )
             SettingSlider(
                 label = "Короткий перерыв",
@@ -94,7 +99,7 @@ fun SettingsScreen(
                 valueRange = 5f..15f,
                 steps = 4,
                 color = ZenAccent,
-                onValueChange = { viewModel.setShortBreak(it.toInt()) }
+                onValueChange = { viewModel.setShortBreak(it.roundToInt()) }
             )
             SettingSlider(
                 label = "Длинный перерыв",
@@ -102,7 +107,7 @@ fun SettingsScreen(
                 valueRange = 15f..30f,
                 steps = 4,
                 color = ZenAccent,
-                onValueChange = { viewModel.setLongBreak(it.toInt()) }
+                onValueChange = { viewModel.setLongBreak(it.roundToInt()) }
             )
 
             Spacer(modifier = Modifier.height(32.dp))
@@ -159,17 +164,21 @@ private fun SettingSlider(
     color: androidx.compose.ui.graphics.Color,
     onValueChange: (Float) -> Unit
 ) {
+    var sliderValue by remember(value) { mutableStateOf(value.toFloat()) }
+    LaunchedEffect(value) { sliderValue = value.toFloat() }
+
     Column(modifier = Modifier.padding(vertical = 8.dp)) {
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(label, color = ZenText, fontFamily = Outfit)
-            Text("$value м", color = color, fontFamily = Outfit)
+            Text("${sliderValue.toInt()} м", color = color, fontFamily = Outfit)
         }
         Slider(
-            value = value.toFloat(),
-            onValueChange = { onValueChange(it) },
+            value = sliderValue,
+            onValueChange = { sliderValue = it },
+            onValueChangeFinished = { onValueChange(sliderValue) },
             valueRange = valueRange,
             steps = steps,
             colors = SliderDefaults.colors(
