@@ -1,6 +1,6 @@
 package zentimer.app.di
 
-import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 import zentimer.app.presentation.path.PathViewModel
 import zentimer.app.presentation.settings.SettingsViewModel

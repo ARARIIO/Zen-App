@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "zentimer.app",
+      "sha256_cert_fingerprints": [
+        "0B:35:42:31:C9:99:51:1D:74:F7:7C:22:C4:81:CA:6F:09:86:3D:1F:FC:71:F9:55:1A:9A:91:A3:BB:C5:4E:2A"
+      ]
+    }
+  }
+]
